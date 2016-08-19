@@ -75,13 +75,14 @@ def extract_raw_data_request(request):
     tried_encodings = []
 
     # Try charset from content-type
-    encoding = request.charset if request.charset else 'utf-8'
+    encoding = request.charset or 'utf-8'
 
-    if encoding:
-        try:
-            return text_type(raw_data, encoding)
-        except UnicodeError:
-            tried_encodings.append(encoding)
+    try:
+        if isinstance(raw_data, text_type):
+            return raw_data
+        return text_type(raw_data, encoding)
+    except UnicodeError:
+        tried_encodings.append(encoding)
 
     # Fall back:
     try:
