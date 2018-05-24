@@ -79,6 +79,8 @@ def extract_raw_data_request(request):
 
     if encoding:
         try:
+            if isinstance(raw_data, text_type):
+                return raw_data
             return text_type(raw_data, encoding)
         except UnicodeError:
             tried_encodings.append(encoding)
